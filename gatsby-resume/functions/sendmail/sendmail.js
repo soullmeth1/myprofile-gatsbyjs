@@ -2,7 +2,10 @@ const nodemailer = require('nodemailer');
 const path = require('path');
 
 const transporter = nodemailer.createTransport({
-  service: process.env.BASE_SERVICE,
+  // service: process.env.BASE_SERVICE,
+  host: 'smtp.zoho.com',
+  port: 465,
+  secure: true, // use SSL
   auth: {
     user: process.env.EMAIL_FORWARD,
     pass: process.env.EMAIL_PASS,
