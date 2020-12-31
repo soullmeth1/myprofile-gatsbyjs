@@ -66,6 +66,7 @@ function Header() {
           I am very interested in website development, as a frontend developer,
           it is an obligation to keep learning and develop myself.
         </p>
+        <p>Let's get started.</p>
         <a href="#contact" className="btn btn-primary">
           Get In Touch
         </a>
