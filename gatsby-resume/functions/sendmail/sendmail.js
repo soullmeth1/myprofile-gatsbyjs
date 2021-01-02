@@ -43,8 +43,7 @@ function Message(email, data, me = false) {
         {
           // use URL as an attachment
           filename: 'myResume.pdf',
-          path:
-            'https://firebasestorage.googleapis.com/v0/b/insta-exercise.appspot.com/o/images%2Feh.pdf?alt=media&token=7d975c65-c83f-4599-938d-bcf73ff9e31e',
+          path: proces.env.EMAIL_ATTACHMENT,
         },
       ],
     };
