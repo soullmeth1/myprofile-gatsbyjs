@@ -43,7 +43,7 @@ function Message(email, data, me = false) {
         {
           // use URL as an attachment
           filename: 'myResume.pdf',
-          path: proces.env.EMAIL_ATTACHMENT,
+          path: process.env.EMAIL_ATTACHMENT,
         },
       ],
     };
