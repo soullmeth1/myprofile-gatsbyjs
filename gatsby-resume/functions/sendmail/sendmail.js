@@ -1,24 +1,63 @@
 const nodemailer = require('nodemailer');
-const path = require('path');
+const { google } = require('googleapis');
 
-const transporter = nodemailer.createTransport({
-  // service: process.env.BASE_SERVICE,
-  host: 'smtp.zoho.com',
-  port: 465,
-  secure: true, // use SSL
-  auth: {
-    user: process.env.EMAIL_FORWARD,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const oAuth2Client = new google.auth.OAuth2(
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  process.env.REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
-async function sendEmail(email, content) {
-  transporter.sendMail({
-    from: `"no-reply" <${process.env.EMAIL_FORWARD}>`,
-    to: `${email}`,
-    text: 'This message is automatically reply',
-    ...content,
-  });
+async function createTransporter() {
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    const transport = nodemailer.createTransport({
+      service: process.env.BASE_SERVICE,
+      auth: {
+        type: 'OAuth2',
+        user: process.env.EMAIL_FORWARD,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessToken: accessToken,
+      },
+    });
+    return transport;
+  } catch (error) {
+    return error;
+  }
+}
+
+function Message(email, data, me = false) {
+  if (!me) {
+    return {
+      from: 'no-reply <clothes.up92@gmail.com>',
+      to: `${email}`,
+      text: 'This is an auto email',
+      subject: 'Thanks to send me an email',
+      html: `<p>Hello ${data.name}, I'd like to say thanks to you for sending me an email.</p>
+      <p>There is my resume attached and I hope you interested so we can join together.</p>
+      <p>See ya..</p>`,
+      attachments: [
+        {
+          // use URL as an attachment
+          filename: 'myResume.pdf',
+          path:
+            'https://firebasestorage.googleapis.com/v0/b/insta-exercise.appspot.com/o/images%2Feh.pdf?alt=media&token=7d975c65-c83f-4599-938d-bcf73ff9e31e',
+        },
+      ],
+    };
+  } else {
+    return {
+      from: 'no-reply <clothes.up92@gmail.com>',
+      to: `${process.env.BASE_EMAIL}`,
+      text: 'This is an auto email',
+      subject: 'You have an email',
+      html: `<p>You have an email from ${data.name} and he said "${data.message}"</p>
+      <p>You can reply to this email ${data.email}</p>`,
+    };
+  }
 }
 
 exports.handler = async (event) => {
@@ -45,28 +84,18 @@ exports.handler = async (event) => {
     };
   }
 
-  const content = {
-    subject: 'Thanks to send me an email',
-    html: `<p>Hello ${name}, I'd like to say thanks to you for sending me an email.</p>
-    <p>Here is my resume.</p>`,
-    attachments: [
-      {
-        filename: 'myResume.pdf',
-        path: process.env.EMAIL_ATTACHMENT,
-      },
-    ],
-  };
+  const transporter = await createTransporter();
 
-  sendEmail(email, content);
-  sendEmail(process.env.BASE_EMAIL, {
-    subject: 'Get in touch',
-    html: `<p>You have an email from ${name} ${email}. He said, '${message}'.</p>`,
-  });
+  const res = await Promise.race([
+    transporter.sendMail(Message(email, data)),
+    transporter.sendMail(Message(email, data, true)),
+  ]);
 
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Success sending a message, Please check your email!',
+      message: 'Email has been sent!',
+      ...res,
     }),
   };
 };
