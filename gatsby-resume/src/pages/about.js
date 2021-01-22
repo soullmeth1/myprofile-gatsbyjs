@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'gatsby';
 import styled from 'styled-components';
 import SEO from '../components/SEO';
 import { BsArrowRight, BsThreeDots } from 'react-icons/bs';
@@ -148,7 +149,7 @@ function about() {
               </p>
               <div>
                 <h4>reactjs</h4>
-                <BtnStart href="">
+                <BtnStart href="#">
                   Start
                   <BsArrowRight />
                 </BtnStart>
@@ -161,10 +162,10 @@ function about() {
         <ul>
           <h3>My Biography</h3>
           <li>
-            <a href="#whoiam">Who I am</a>
+            <Link to="#whoiam">Who I am</Link>
           </li>
           <li>
-            <a href="#whychooseme">Why choose me</a>
+            <Link to="#whychooseme">Why choose me</Link>
           </li>
         </ul>
         <ul>

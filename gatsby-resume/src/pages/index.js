@@ -9,7 +9,7 @@ import Technologies from '../components/Technologies';
 
 function homePage(props) {
   const { data } = props;
-  console.log(data);
+  // console.log(data);
   return (
     <div>
       <SEO title="Home" />
