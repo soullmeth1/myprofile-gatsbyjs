@@ -11,7 +11,7 @@ oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 async function createTransporter() {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
-
+    console.log(accessToken.res.data, 'hey');
     const transport = nodemailer.createTransport({
       service: process.env.BASE_SERVICE,
       auth: {
@@ -19,8 +19,9 @@ async function createTransporter() {
         user: process.env.EMAIL_FORWARD,
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
-        refreshToken: process.env.REFRESH_TOKEN,
-        accessToken: accessToken,
+        // refreshToken: process.env.REFRESH_TOKEN,
+        refreshToken: accessToken.res.data.refresh_token,
+        accessToken: accessToken.res.data.access_tokens,
       },
     });
     return transport;
