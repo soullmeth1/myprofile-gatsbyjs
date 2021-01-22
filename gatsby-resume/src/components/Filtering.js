@@ -86,7 +86,7 @@ function Filtering({ data }) {
       ul.current.scroll(ul.current.clientWidth + ul.current.scrollLeft, 0);
     }
     setBtn(ul.current.clientWidth + ul.current.scrollLeft);
-    console.log(btn);
+    // console.log(btn);
     // setScroll((val) => true);
   };
 

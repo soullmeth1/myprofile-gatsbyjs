@@ -8,9 +8,10 @@ const GlobalStyle = createGlobalStyle`
     --light-gray: #505050;
     --soft-gray: #e0e0e0;
     --text-black: #3c3c3c;
-    --sub-text: #757575;
+    --sub-text: #36313d;
     --btn-primary: #ff5454;
     --secondary:#6c63ff;
+    --title:#1b1464;
 
     
     /* --background : #0000006b;
