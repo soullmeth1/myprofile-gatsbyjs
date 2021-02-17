@@ -61,7 +61,7 @@ function Header() {
       </div>
       <div>
         <h1>Hello, My Name is Mubaroq</h1>
-        <h2>Sr. Frontend Developer</h2>
+        <h2>Frontend Developer</h2>
         <p>
           I am very interested in website development, as a frontend developer,
           it is an obligation to keep learning and develop myself.
